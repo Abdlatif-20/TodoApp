@@ -16,6 +16,9 @@ class Task {
   String taskName;
   bool taskStatus;
   Task({required this.taskName, required this.taskStatus});
+  setTask(String newTask) {
+    taskName = newTask;
+  }
 }
 
 class _TodoAppState extends State<TodoApp> {
@@ -24,7 +27,6 @@ class _TodoAppState extends State<TodoApp> {
   List allTask = [];
   int numberTasks = 0;
   int tasksIsDone = 0;
-
 
   int checkTaskIsDone() {
     int calculateCompletedTask = 0;
@@ -52,19 +54,26 @@ class _TodoAppState extends State<TodoApp> {
     });
   }
 
-deletTask(int taskIndex)
-{
+  deletTask(int taskIndex) {
+    setState(() {
+      allTask.removeAt(taskIndex);
+    });
+  }
+
+  deletAllTask() {
+    setState(() {
+      allTask.clear();
+    });
+  }
+
+editTask(int index, String newTask) {
   setState(() {
-    allTask.removeAt(taskIndex);
+    if (index >= 0 && index < allTask.length) {
+    allTask[index].setTask(newTask);
+  }
   });
 }
 
-deletAllTask()
-{
-  setState(() {
-    allTask.clear();
-  });
-}
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +146,11 @@ deletAllTask()
             onPressed: () {
               deletAllTask();
             },
-            icon: Icon(Icons.delete_forever, color: Colors.white,),
+            tooltip: "delete all task",
+            icon: Icon(
+              Icons.delete_forever,
+              color: Colors.white,
+            ),
           )
         ],
         backgroundColor: Color.fromRGBO(58, 66, 86, 1),
@@ -171,6 +184,8 @@ deletAllTask()
                         myfunc: changeStatus,
                         taskindex: index,
                         deletTask: deletTask,
+                        editTask: editTask,
+                        allTask: allTask,
                       );
                     }),
               ),
