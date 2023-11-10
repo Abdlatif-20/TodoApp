@@ -214,16 +214,14 @@ class _TodoAppState extends State<TodoApp> {
                   ),
                 if (!taskIsEmpty)
                   Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 190, bottom: 20),
-                      child: Image.asset("assets/img/arrow1.png",
-                          color: Colors.white, width: 70),
-                    ),
+                    padding: const EdgeInsets.only(left: 190, bottom: 20),
+                    child: Image.asset("assets/img/arrow1.png",
+                        color: Colors.white, width: 70),
                   ),
               
               ],
             ),
+          
           ],
         ),
       ),
