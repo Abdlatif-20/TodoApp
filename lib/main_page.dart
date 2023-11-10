@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:todo_app/todo_card.dart';
-
 import 'counter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 class TodoApp extends StatefulWidget {
   const TodoApp({super.key});
@@ -11,6 +12,10 @@ class TodoApp extends StatefulWidget {
   @override
   State<TodoApp> createState() => _TodoAppState();
 }
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 
 class Task {
   String taskName;

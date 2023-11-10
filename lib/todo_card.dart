@@ -84,7 +84,7 @@ class TodoCard extends StatelessWidget {
                             content: TextField(
                               controller: controller,
                             ),
-                            actions: <Widget>[
+                            actions: [
                               TextButton(
                                 child: Text('Save'),
                                 onPressed: () {
