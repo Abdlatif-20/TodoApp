@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:todo_app/todo_card.dart';
-import 'counter.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'counter.dart';
 
 class TodoApp extends StatefulWidget {
   const TodoApp({super.key});
@@ -12,10 +12,6 @@ class TodoApp extends StatefulWidget {
   @override
   State<TodoApp> createState() => _TodoAppState();
 }
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 
 class Task {
   String taskName;
@@ -32,6 +28,7 @@ class _TodoAppState extends State<TodoApp> {
   List allTask = [];
   int numberTasks = 0;
   int tasksIsDone = 0;
+  bool taskIsEmpty = false;
 
   int checkTaskIsDone() {
     int calculateCompletedTask = 0;
@@ -62,6 +59,9 @@ class _TodoAppState extends State<TodoApp> {
   deletTask(int taskIndex) {
     setState(() {
       allTask.removeAt(taskIndex);
+      if (allTask.isEmpty) {
+        taskIsEmpty = false;
+      }
     });
   }
 
@@ -71,14 +71,13 @@ class _TodoAppState extends State<TodoApp> {
     });
   }
 
-editTask(int index, String newTask) {
-  setState(() {
-    if (index >= 0 && index < allTask.length) {
-    allTask[index].setTask(newTask);
+  editTask(int index, String newTask) {
+    setState(() {
+      if (index >= 0 && index < allTask.length) {
+        allTask[index].setTask(newTask);
+      }
+    });
   }
-  });
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,53 +86,59 @@ editTask(int index, String newTask) {
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: () {
+          taskIsEmpty = true;
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Container(
-                  height: 150,
-                  margin: EdgeInsets.only(left: 10),
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextField(
-                        keyboardType: TextInputType.text,
-                        controller: newTask,
-                        maxLength: 20,
-                        decoration: InputDecoration(
-                          hintText: "Add Your Task",
-                          prefix: Container(
-                              margin: EdgeInsets.only(left: 10, right: 10),
-                              child: Icon(
-                                Icons.task,
-                                color: Colors.red,
-                              )),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: TextButton(
-                          onPressed: () {
-                            addNewTask();
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "Add Task",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.redAccent,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(
+                      height: 150,
+                      margin: EdgeInsets.only(left: 10),
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextField(
+                            keyboardType: TextInputType.text,
+                            controller: newTask,
+                            maxLength: 40,
+                            decoration: InputDecoration(
+                              hintText: "Add Your Task",
+                              prefix: Container(
+                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  child: Icon(
+                                    Icons.task,
+                                    color: Colors.red,
+                                  )),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            child: TextButton(
+                              onPressed: () {
+                                addNewTask();
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "Add Task",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               );
             },
           );
@@ -149,6 +154,7 @@ editTask(int index, String newTask) {
         actions: [
           IconButton(
             onPressed: () {
+              taskIsEmpty = false;
               deletAllTask();
             },
             tooltip: "delete all task",
@@ -194,7 +200,30 @@ editTask(int index, String newTask) {
                       );
                     }),
               ),
-            )
+            ),
+            Column(
+              children: [
+                if (!taskIsEmpty)
+                  Text(
+                    "Add Your First Task",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontFamily: "myfont",
+                    ),
+                  ),
+                if (!taskIsEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 190, bottom: 20),
+                      child: Image.asset("assets/img/arrow1.png",
+                          color: Colors.white, width: 70),
+                    ),
+                  ),
+              
+              ],
+            ),
           ],
         ),
       ),
